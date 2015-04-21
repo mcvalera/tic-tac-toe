@@ -1,20 +1,25 @@
 body {
   font-family: "Open Sans", sans-serif;
+  color: gray;
   text-align: center; }
   body h1 {
     font-size: 3em;
     margin-bottom: 20px; }
 
-h3 {
-  margin-bottom: 50px; }
+hr {
+  margin-top: 10px;
+  margin-bottom: 20px; }
+
+.start_buttons {
+  margin-bottom: 40px; }
 
 table {
-  min-width: 330px;
-  min-height: 330px;
   margin: 0 auto; }
 
 td {
-  border: 1px solid gray;
-  text-align: center; }
+  border: 3px solid gray;
+  text-align: center;
+  width: 110px;
+  height: 110px; }
 
 /*# sourceMappingURL=application.css.map */

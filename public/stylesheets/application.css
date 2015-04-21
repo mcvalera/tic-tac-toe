@@ -2,6 +2,19 @@ body {
   font-family: "Open Sans", sans-serif;
   text-align: center; }
   body h1 {
-    font-size: 3em; }
+    font-size: 3em;
+    margin-bottom: 20px; }
+
+h3 {
+  margin-bottom: 50px; }
+
+table {
+  min-width: 330px;
+  min-height: 330px;
+  margin: 0 auto; }
+
+td {
+  border: 1px solid gray;
+  text-align: center; }
 
 /*# sourceMappingURL=application.css.map */

@@ -4,14 +4,20 @@ body {
   text-align: center; }
   body h1 {
     font-size: 3em;
-    margin-bottom: 20px; }
+    margin-top: 20px;
+    margin-bottom: 10px; }
 
 hr {
-  margin-top: 10px;
-  margin-bottom: 20px; }
+  margin-top: 0px;
+  margin-bottom: 10px; }
 
-.start_buttons {
-  margin-bottom: 40px; }
+h3 {
+  margin-bottom: 10px; }
+
+.dynamic_text {
+  color: #e95581; }
+  .dynamic_text h4 {
+    margin-bottom: 10px; }
 
 table {
   margin: 0 auto; }
@@ -20,6 +26,13 @@ td {
   border: 3px solid gray;
   text-align: center;
   width: 110px;
-  height: 110px; }
+  height: 110px;
+  font-size: 4em; }
+
+.x {
+  color: #e95581; }
+
+.o {
+  color: #B9E9F0; }
 
 /*# sourceMappingURL=application.css.map */

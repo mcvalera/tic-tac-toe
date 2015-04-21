@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="public/stylesheets/application.css">
     <!-- fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <!-- REMOVE LATER - used for making x and o icons -->
+    <!-- for x and o -->
+    <!-- <link href='http://fonts.googleapis.com/css?family=Sniglet:400,800' rel='stylesheet' type='text/css'> -->
   </head>
 
   <body>
@@ -16,28 +19,31 @@
       <h1>Tic Tac Toe</h1>
       <hr>
       <h3>You can try to win, but you probably won't</h3>
-      <h4>Would you like to begin?</h4>
-      <div class="start_buttons">
-        <button>yes</button>
-        <button>no</button>
+      <div class="dynamic_text">
+        <h4 id="turn_text" style="display:none">Your turn</h4>
+        <div class="start_buttons">
+          <h4>Start whenever you're ready</h4>
+<!--           <button class="user_starts">yes</button>
+          <button class="computer_starts">no</button> -->
+        </div>
       </div>
 
       <div class="grid">
         <table>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td id="a1" onClick="humansMove(this.id,0,0)"></td>
+            <td id="a2" onClick="humansMove(this.id,0,1)"></td>
+            <td id="a3" onClick="humansMove(this.id,0,2)"></td>
           </tr>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td id="b1" onClick="humansMove(this.id,1,0)"></td>
+            <td id="b2" onClick="humansMove(this.id,1,1)"></td>
+            <td id="b3" onClick="humansMove(this.id,1,2)"></td>
           </tr>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td id="c1" onClick="humansMove(this.id,2,0)"></td>
+            <td id="c2" onClick="humansMove(this.id,2,1)"></td>
+            <td id="c3" onClick="humansMove(this.id,2,2)"></td>
           </tr>
         </table>
       </div>

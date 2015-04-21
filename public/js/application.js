@@ -21,7 +21,16 @@ function createGame() {
   }
 }
 
-function reloadGame() {}
+function reloadGame() {
+  currentTurn = human;
+  blankCells = 9;
+  clearTable();
+  createGame();
+}
+
+function clearTable() {
+  $("td").empty();
+}
 
 function nextTurn() {
   console.log("next turn");
@@ -32,34 +41,46 @@ function nextTurn() {
   }
 }
 
+// accessed from onclick attribute in view.html
 function humansMove(id,row,column) {
   // if cell is already occupied, the move is invalid
-  content = $("#"+id).text();
+  var content = $("#"+id).text();
   if (content.length > 0) {
     $(".dynamic_text").addClass("dynamic_text").html("<h4>Invalid move</h4>");
     return;
   }
   $("#"+id).addClass("x").html("X");
+
   // populate 2d array with corresponding tile
   game[row][column] = "X";
+
   // decrement number of blank cells
   blankCells -= 1;
-  console.log(blankCells);
+  console.log(blankCells); //check if blank cell decrementing
 
   var result = checkForWinner(game);
   if (result !== "continue") {
-    if (result === "draw") {
-      $(".dynamic_text").addClass("dynamic_text").html("<h4>Draw!</h4>");
-      return;
-    } else if (result === "X") {
-      // to check if human can win --hopefully not!
-        $(".dynamic_text").addClass("dynamic_text").html("<h4>You win!</h4>");
-    } else {
-        $(".dynamic_text").addClass("dynamic_text").html("<h4>I win!</h4>");
-    }
-    reloadGame();
+    endTheGame(result);
   }
   nextTurn();
+  aiMove(); //undefined still
+  result = checkForWinner(game);
+  if (result !== "continue") {
+    endTheGame(result);
+  }
+}
+
+function endTheGame(result) {
+  if (result === "draw") {
+    $(".dynamic_text").addClass("dynamic_text").html("<h4>Draw!</h4>");
+  } else if (result === "X") {
+    // to check if human can win --hopefully not!
+      $(".dynamic_text").addClass("dynamic_text").html("<h4>You win!</h4>");
+  } else {
+      $(".dynamic_text").addClass("dynamic_text").html("<h4>I win!</h4>");
+  }
+  reloadGame();
+  return;
 }
 
 function checkForWinner(game) {

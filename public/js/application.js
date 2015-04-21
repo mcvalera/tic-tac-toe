@@ -2,6 +2,7 @@ $(document).ready(function() {
   console.log("document ready");
 
   createGame();
+  loadEventListener(); // for button to reload the game
 });
 
 var human = "X";
@@ -30,6 +31,13 @@ function reloadGame() {
 
 function clearTable() {
   $("td").empty();
+  // empty();
+}
+
+function loadEventListener() {
+  $("#reload").click(function() {
+    reloadGame();
+  });
 }
 
 function nextTurn() {
@@ -43,6 +51,10 @@ function nextTurn() {
 
 // accessed from onclick attribute in view.html
 function humansMove(id,row,column) {
+
+  // remove prompt to start once player begins game
+  $(".start").fadeOut("slow");
+
   // if cell is already occupied, the move is invalid
   var content = $("#"+id).text();
   if (content.length > 0) {
@@ -70,6 +82,7 @@ function humansMove(id,row,column) {
   }
 }
 
+// when a draw happens or a winner has been found
 function endTheGame(result) {
   if (result === "draw") {
     $(".dynamic_text").addClass("dynamic_text").html("<h4>Draw!</h4>");
@@ -79,7 +92,7 @@ function endTheGame(result) {
   } else {
       $(".dynamic_text").addClass("dynamic_text").html("<h4>I win!</h4>");
   }
-  reloadGame();
+  // reloadGame(); //allow user to reload game manually by pressing start over button
   return;
 }
 

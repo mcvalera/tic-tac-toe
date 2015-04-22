@@ -40,7 +40,6 @@ function loadEventListener() {
     reloadGame();
     $(".dynamic_text").html('<h4 class="start_text">Start whenever you\'re ready</h4>');
   });
-  //.addClass("start_text")
 }
 
 function nextTurn() {
@@ -62,7 +61,7 @@ function humansMove(id,row,column) {
   // if cell is already occupied, the move is invalid
   var content = $("#"+id).text();
   if (content.length > 0) {
-    $(".dynamic_text").addClass("dynamic_text").html("<h4>Invalid move</h4>");
+    $(".dynamic_text").html("<h4>Invalid move</h4>");
     return;
   }
   $("#"+id).addClass("x").html("X");
@@ -101,12 +100,12 @@ function aiMove() {
 // when a draw happens or a winner has been found
 function endTheGame(result) {
   if (result === "draw") {
-    $(".dynamic_text").addClass("dynamic_text").html("<h4>Draw!</h4>");
+    $(".dynamic_text").html("<h4>Draw!</h4>");
   } else if (result === "X") {
     // to check if human can win --hopefully not!
-      $(".dynamic_text").addClass("dynamic_text").html("<h4>You win!</h4>");
+      $(".dynamic_text").html("<h4>You win!</h4>");
   } else {
-      $(".dynamic_text").addClass("dynamic_text").html("<h4>I win!</h4>");
+      $(".dynamic_text").html("<h4>I win!</h4>");
   }
   // reloadGame(); //allow user to reload game manually by pressing start over button
   return;

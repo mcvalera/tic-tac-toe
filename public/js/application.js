@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  console.log("document ready");
+  // console.log("document ready");
 
   createGame();
   loadEventListener(); // for button to reload the game
@@ -14,7 +14,6 @@ var currentTurnInPossibilities; //declare AI / "O" as default later?
 function reloadGame() {
   currentTurn = "X";
   blankCells = 9;
-  console.log("blank cells - " + blankCells);
   clearTable();
   createGame();
 }
@@ -38,6 +37,7 @@ function loadEventListener() {
   $("#reload").click(function() {
     reloadGame();
     $(".dynamic_text").html('<h4 class="start_text">Start whenever you\'re ready</h4>');
+    $(".check").html("");
   });
 }
 
@@ -77,7 +77,7 @@ function humansMove(id,row,column) {
     endTheGame(result);
   }
   switchTurn();
-  console.log("the current turn - " + currentTurn);
+  // console.log("the current turn - " + currentTurn);
   aiMove(); //undefined still
   result = checkForWinner(game);
   if (result !== "continue") {
@@ -87,9 +87,9 @@ function humansMove(id,row,column) {
 
 function aiMove() {
   // debugger;
-  console.log("ai move");
+  // console.log("ai move");
   // return if it's not the ai's turn -- maybe get rid of this later
-  console.log("current turn - letter " + currentTurn)
+  // console.log("current turn - letter " + currentTurn)
   if (currentTurn !== "O") {
     return;
   }
@@ -104,23 +104,27 @@ function aiMove() {
   // for each blank cell, plop in "O"
   // debugger;
   for (var i = 0; i < gameClone.length; i++) {
-    for (var j = 0; j <gameClone[i].length; j++) {
+    for (var j = 0; j < gameClone[i].length; j++) {
       if (gameClone[i][j] === "") {
         // debugger;
         gameClone[i][j] = currentTurnInPossibilities;
-        console.log("gameClone[i][j]" + "[" +i+ "][" +j+ "] tile - " + gameClone[i][j]);
-        console.log("game[i][j] - " + game[i][j]);
+        // console.log("gameClone[i][j]" + "[" +i+ "][" +j+ "] tile - " + gameClone[i][j]);
+        // console.log("game[i][j] - " + game[i][j]);
 
         blankCells -= 1; // decrementing unnecessarily currently blah
         // console.log("blankCells - " + blankCells);
 
         switchTurnInPossibilities();
-        console.log("switch turn in possibilities - first turn should be x - " + currentTurnInPossibilities);
+        // console.log("switch turn in possibilities - first turn should be x - " + currentTurnInPossibilities);
 
         possibleResult = searchThroughDepths(1);
-        $(".check").html("row " + row + "column " + col + "possibleResult " + possibleResult + "<br>")
+        // debugger;
+        $(".check").append("row " + i + " column " + j + " possibleResult " + possibleResult + "<br>")
         gameClone[i][j] = "";
         blankCells +=1;
+        console.log("choice in aiMove() - " + choice);
+        console.log("possibleResult in aiMove() - " + possibleResult);
+        console.log("[ " +row+ " ][" +col+ "]");
         if (choice === -1000) {
           choice = possibleResult;
           row = i;
@@ -134,9 +138,10 @@ function aiMove() {
       }
     }
   }
-  $(".check").html("choice "+ choice + "row " + row + "col " + col);
+  $(".check").append("return -- choice "+ choice + " row " + row + " col " + col);
   game[row][col] = "O"
   blankCells -= 1;
+  // console.log("blankCells - " + blankCells);
   populateTable(row, col);
   switchTurn();
 }
@@ -147,8 +152,9 @@ function populateTable(row, col) {
 }
 
 function searchThroughDepths(level) {
+  console.log(level);
   var possibleResult = checkForWinner(gameClone);
-  console.log("searchThroughDepths - possibleResult is - "+ possibleResult);
+  // console.log("searchThroughDepths - possibleResult is - "+ possibleResult);
   if (possibleResult === "O") { // AI wins
     return 100 - level;
   } else if (possibleResult === "X") { // human player wins
@@ -156,23 +162,25 @@ function searchThroughDepths(level) {
   } else if (possibleResult === "draw") {
     return 0;
   }
-
+  console.log("searchThroughDepths ------");
   var choice = -1000;
   var otherOptions;
 
   for (var i = 0; i < gameClone.length; i++) {
     for (var j = 0; j < gameClone[i].length; j++) {
       if (gameClone[i][j] === "") {
-        console.log("per blank cell in searchThroughDepths");
+        // console.log("per blank cell in searchThroughDepths");
 
         gameClone[i][j] = currentTurnInPossibilities;
-        console.log("gameClone[i][j]" + "[" +i+ "][" +j+ "] tile - " + gameClone[i][j]);
-        console.log("game[i][j] - " + game[i][j]);
+        // console.log("gameClone[i][j]" + "[" +i+ "][" +j+ "] tile - " + gameClone[i][j]);
+        // console.log("game[i][j] - " + game[i][j]);
 
         switchTurnInPossibilities();
 
         blankCells -= 1;
         otherOptions = searchThroughDepths(level+1);
+        console.log("searththrudepths - choice blah - " + choice);
+        console.log("searththrudepths - otherOptions blah - " + otherOptions);
         switchTurnInPossibilities();
         gameClone[i][j] == "";
         blankCells += 1;
@@ -190,6 +198,7 @@ function searchThroughDepths(level) {
       }
     }
   }
+  console.log("searchthrudepths - choice blah being returned - " + choice);
   return choice;
 }
 
@@ -219,7 +228,7 @@ function endTheGame(result) {
   if (result === "draw") {
     $(".dynamic_text").html("<h4>Draw!</h4>");
   } else if (result === "X") {
-    // to check if human can win --hopefully not!
+    // just to check if human can win --hopefully not!
       $(".dynamic_text").html("<h4>You win!</h4>");
   } else {
       $(".dynamic_text").html("<h4>I win!</h4>");
@@ -256,7 +265,6 @@ function checkForWinner(game) {
     return "draw";
  }
  // resume playing until game ends in a draw or a winner is found
- // console.log("check for winner - continue");
  return "continue";
 }
 

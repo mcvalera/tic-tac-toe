@@ -25,6 +25,7 @@ function createGame() {
 function reloadGame() {
   currentTurn = human;
   blankCells = 9;
+  console.log("blank cells - " + blankCells);
   clearTable();
   createGame();
 }
@@ -37,7 +38,9 @@ function clearTable() {
 function loadEventListener() {
   $("#reload").click(function() {
     reloadGame();
+    $(".dynamic_text").html('<h4 class="start_text">Start whenever you\'re ready</h4>');
   });
+  //.addClass("start_text")
 }
 
 function nextTurn() {
@@ -52,7 +55,9 @@ function nextTurn() {
 function humansMove(id,row,column) {
 
   // remove prompt to start once player begins game
-  $(".start").fadeOut("slow");
+  if (blankCells === 9) {
+    $(".start_text").fadeOut("slow");
+  }
 
   // if cell is already occupied, the move is invalid
   var content = $("#"+id).text();

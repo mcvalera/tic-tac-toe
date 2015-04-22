@@ -24,7 +24,7 @@ function createGame() {
   for (var i = 0; i < game.length; i++) {
     game[i] = new Array(3);
     for (var j = 0; j < game[i].length; j++) {
-      game[i][j] = ""
+      game[i][j] = "";
     }
   }
 }
@@ -52,7 +52,6 @@ function switchTurn() {
 // accessed from onclick attribute in view.html
 function humansMove(id,row,column) {
   // debugger;
-  // remove prompt to start once player begins game
   if (blankCells === 9) {
     $(".start_text").fadeOut("slow");
   }
@@ -65,12 +64,12 @@ function humansMove(id,row,column) {
   }
   $("#"+id).addClass("x").html("X");
 
-  // populate 2d array with corresponding tile
+  // populate 2d game array with corresponding tile
   game[row][column] = "X";
 
   // decrement number of blank cells
   blankCells -= 1;
-  console.log("blank cells left - " + blankCells); //check if blank cell decrementing
+  console.log("blank cells left - " + blankCells); //check if blank cells decrementing
 
   var result = checkForWinner(game);
   if (result !== "continue") {
@@ -119,7 +118,7 @@ function aiMove() {
 
         possibleResult = searchThroughDepths(1);
         // debugger;
-        $(".check").append("row " + i + " column " + j + " possibleResult " + possibleResult + "<br>")
+        $(".check").append("row " + i + " column " + j + " possibleResult " + possibleResult + "<br>");
         gameClone[i][j] = "";
         blankCells +=1;
         console.log("choice in aiMove() - " + choice);
@@ -139,7 +138,7 @@ function aiMove() {
     }
   }
   $(".check").append("return -- choice "+ choice + " row " + row + " col " + col);
-  game[row][col] = "O"
+  game[row][col] = "O";
   blankCells -= 1;
   // console.log("blankCells - " + blankCells);
   populateTable(row, col);
@@ -179,10 +178,10 @@ function searchThroughDepths(level) {
 
         blankCells -= 1;
         otherOptions = searchThroughDepths(level+1);
-        console.log("searththrudepths - choice blah - " + choice);
-        console.log("searththrudepths - otherOptions blah - " + otherOptions);
+        console.log("searchthrudepths - choice blah - " + choice);
+        console.log("searchthrudepths - otherOptions blah - " + otherOptions);
         switchTurnInPossibilities();
-        gameClone[i][j] == "";
+        gameClone[i][j] = "";
         blankCells += 1;
         if (choice === -1000) {
           choice = otherOptions;

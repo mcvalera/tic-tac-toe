@@ -9,7 +9,7 @@ var currentTurn = "X"; // where X is always human player, and O is always AI
 var blankCells = 9;
 var game; // 3x3 array
 var gameClone; //for AI to explore possibilities on
-var currentTurnInPossibilities; //declare AI as default later?
+var currentTurnInPossibilities; //declare AI / "O" as default later?
 
 function reloadGame() {
   currentTurn = "X";
@@ -32,7 +32,6 @@ function createGame() {
 
 function clearTable() {
   $("td").empty();
-  // empty();
 }
 
 function loadEventListener() {
@@ -52,7 +51,7 @@ function switchTurn() {
 
 // accessed from onclick attribute in view.html
 function humansMove(id,row,column) {
-
+  // debugger;
   // remove prompt to start once player begins game
   if (blankCells === 9) {
     $(".start_text").fadeOut("slow");
@@ -87,9 +86,10 @@ function humansMove(id,row,column) {
 }
 
 function aiMove() {
+  // debugger;
   console.log("ai move");
   // return if it's not the ai's turn -- maybe get rid of this later
-  console.log("current turn - " + currentTurn)
+  console.log("current turn - letter " + currentTurn)
   if (currentTurn !== "O") {
     return;
   }
@@ -97,20 +97,121 @@ function aiMove() {
   if (blankCells === 0) {
     return;
   }
+  // debugger;
   createGameClone();
   currentTurnInPossibilities = "O";
-  // var decl?
+  var possibleResult, row, col, choice = -1000;
+  // for each blank cell, plop in "O"
+  // debugger;
   for (var i = 0; i < gameClone.length; i++) {
     for (var j = 0; j <gameClone[i].length; j++) {
       if (gameClone[i][j] === "") {
+        // debugger;
+        gameClone[i][j] = currentTurnInPossibilities;
+        console.log("gameClone[i][j]" + "[" +i+ "][" +j+ "] tile - " + gameClone[i][j]);
+        console.log("game[i][j] - " + game[i][j]);
 
+        blankCells -= 1; // decrementing unnecessarily currently blah
+        // console.log("blankCells - " + blankCells);
+
+        switchTurnInPossibilities();
+        console.log("switch turn in possibilities - first turn should be x - " + currentTurnInPossibilities);
+
+        possibleResult = searchThroughDepths(1);
+        $(".check").html("row " + row + "column " + col + "possibleResult " + possibleResult + "<br>")
+        gameClone[i][j] = "";
+        blankCells +=1;
+        if (choice === -1000) {
+          choice = possibleResult;
+          row = i;
+          col = j;
+        } else if (possibleResult > choice) {
+          choice = possibleResult;
+          row = i;
+          col = j;
+        }
+        switchTurnInPossibilities();
       }
+    }
+  }
+  $(".check").html("choice "+ choice + "row " + row + "col " + col);
+  game[row][col] = "O"
+  blankCells -= 1;
+  populateTable(row, col);
+  switchTurn();
+}
+
+function populateTable(row, col) {
+  var elemId = row*3 + col + 1;
+  $("#"+elemId).html("O"); //CONTINUE HERE
+}
+
+function searchThroughDepths(level) {
+  var possibleResult = checkForWinner(gameClone);
+  console.log("searchThroughDepths - possibleResult is - "+ possibleResult);
+  if (possibleResult === "O") { // AI wins
+    return 100 - level;
+  } else if (possibleResult === "X") { // human player wins
+    return level - 100;
+  } else if (possibleResult === "draw") {
+    return 0;
+  }
+
+  var choice = -1000;
+  var otherOptions;
+
+  for (var i = 0; i < gameClone.length; i++) {
+    for (var j = 0; j < gameClone[i].length; j++) {
+      if (gameClone[i][j] === "") {
+        console.log("per blank cell in searchThroughDepths");
+
+        gameClone[i][j] = currentTurnInPossibilities;
+        console.log("gameClone[i][j]" + "[" +i+ "][" +j+ "] tile - " + gameClone[i][j]);
+        console.log("game[i][j] - " + game[i][j]);
+
+        switchTurnInPossibilities();
+
+        blankCells -= 1;
+        otherOptions = searchThroughDepths(level+1);
+        switchTurnInPossibilities();
+        gameClone[i][j] == "";
+        blankCells += 1;
+        if (choice === -1000) {
+          choice = otherOptions;
+        } else if (currentTurnInPossibilities === "O") {
+            if (otherOptions > choice) {
+              choice = otherOptions;
+            }
+        } else if (currentTurnInPossibilities === "X") {
+            if (otherOptions < choice) {
+              choice = otherOptions;
+            }
+        }
+      }
+    }
+  }
+  return choice;
+}
+
+function createGameClone() {
+  gameClone = new Array(3);
+  for (var k = 0; k < gameClone.length; k++) {
+    gameClone[k] = new Array(3);
+  }
+
+  for (var i = 0; i < gameClone.length; i++) {
+    for (var j = 0; j < gameClone[i].length; j++) {
+      gameClone[i][j] = game[i][j];
     }
   }
 }
 
-function createGameClone() {
-  gameClone = game.slice()
+function switchTurnInPossibilities() {
+  if (currentTurnInPossibilities === "O") {
+    currentTurnInPossibilities = "X"; //switch to human player
+  } else {
+    currentTurnInPossibilities = "O";
+  }
 }
 
 // when a draw happens or a winner has been found
@@ -155,7 +256,7 @@ function checkForWinner(game) {
     return "draw";
  }
  // resume playing until game ends in a draw or a winner is found
- console.log("continue");
+ // console.log("check for winner - continue");
  return "continue";
 }
 

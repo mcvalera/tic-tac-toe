@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   createGame();
   loadEventListener(); // for button to reload the game
 });
@@ -67,15 +66,13 @@ function humansMove(id,row,column) {
 
   // decrement number of blank cells
   blankCells -= 1;
-  console.log("blank cells left - " + blankCells); //check if blank cells decrementing
 
   var result = checkForWinner(game);
   if (result !== "continue") {
     endTheGame(result);
   }
   switchTurn();
-  // console.log("the current turn - " + currentTurn);
-  aiMove(); //undefined still
+  aiMove(); // AI's turn to play
   result = checkForWinner(game);
   if (result !== "continue") {
     endTheGame(result);
@@ -83,10 +80,7 @@ function humansMove(id,row,column) {
 }
 
 function aiMove() {
-  // debugger;
-  // console.log("ai move");
-  // return if it's not the ai's turn -- maybe get rid of this later
-  // console.log("current turn - letter " + currentTurn)
+  // return if it's not the ai's turn -- maybe get rid of this later?
   if (currentTurn !== "O") {
     return;
   }
@@ -94,40 +88,27 @@ function aiMove() {
   if (blankCells === 0) {
     return;
   }
-  // debugger;
-  createGameClone();
-  currentTurnInPossibilities = "O";
-  var possibleResult, row, col, choice = -1000;
-  // for each blank cell, plop in "O"
-  // debugger;
+  createGameClone(); // to explore possibilities with
+  currentTurnInPossibilities = "O"; // determines whether it's X or O's turn w regards to exploring possibilities
+
+  var possibleResult, row, col;
+  var score = -100; // arbitrary large-ish negative number
+
   for (var i = 0; i < gameClone.length; i++) {
     for (var j = 0; j < gameClone[i].length; j++) {
       if (gameClone[i][j] === "") {
-        // debugger;
         gameClone[i][j] = currentTurnInPossibilities;
-        // console.log("gameClone[i][j]" + "[" +i+ "][" +j+ "] tile - " + gameClone[i][j]);
-        // console.log("game[i][j] - " + game[i][j]);
-
-        blankCells -= 1; // decrementing unnecessarily currently blah
-        // console.log("blankCells - " + blankCells);
-
+        blankCells -= 1;
         switchTurnInPossibilities();
-        // console.log("switch turn in possibilities - first turn should be x - " + currentTurnInPossibilities);
-
         possibleResult = searchThroughDepths(1);
-        // debugger;
-        $(".check").append("row " + i + " column " + j + " possibleResult " + possibleResult + "<br>");
         gameClone[i][j] = "";
         blankCells +=1;
-        console.log("choice in aiMove() - " + choice);
-        console.log("possibleResult in aiMove() - " + possibleResult);
-        console.log("[ " +row+ " ][" +col+ "]");
-        if (choice === -1000) {
-          choice = possibleResult;
+        if (score === -100) {
+          score = possibleResult;
           row = i;
           col = j;
-        } else if (possibleResult > choice) {
-          choice = possibleResult;
+        } else if (possibleResult > score) {
+          score = possibleResult;
           row = i;
           col = j;
         }
@@ -135,68 +116,56 @@ function aiMove() {
       }
     }
   }
-  $(".check").append("return -- choice "+ choice + " row " + row + " col " + col);
+  // $(".check").append("return -- score "+ score + " row " + row + " col " + col +"<br>");
   game[row][col] = "O";
   blankCells -= 1;
-  // console.log("blankCells - " + blankCells);
   populateTable(row, col);
   switchTurn();
 }
 
 function populateTable(row, col) {
   var elemId = row*3 + col + 1;
-  $("#"+elemId).html("O"); //CONTINUE HERE
+  $("#"+elemId).addClass("o").html("O");
 }
 
 function searchThroughDepths(level) {
-  console.log(level);
   var possibleResult = checkForWinner(gameClone);
-  // console.log("searchThroughDepths - possibleResult is - "+ possibleResult);
   if (possibleResult === "O") { // AI wins
-    return 100 - level;
+    return 10 - level;
   } else if (possibleResult === "X") { // human player wins
-    return level - 100;
+    return level - 10;
   } else if (possibleResult === "draw") {
     return 0;
   }
-  console.log("searchThroughDepths ------");
-  var choice = -1000;
+
+  var score = -100; // arbitrary large-ish negative number
   var otherOptions;
 
   for (var i = 0; i < gameClone.length; i++) {
     for (var j = 0; j < gameClone[i].length; j++) {
       if (gameClone[i][j] === "") {
-        // console.log("per blank cell in searchThroughDepths");
-
         gameClone[i][j] = currentTurnInPossibilities;
-        // console.log("gameClone[i][j]" + "[" +i+ "][" +j+ "] tile - " + gameClone[i][j]);
-        // console.log("game[i][j] - " + game[i][j]);
-
         switchTurnInPossibilities();
-
         blankCells -= 1;
         otherOptions = searchThroughDepths(level+1);
-        console.log("searchthrudepths - choice blah - " + choice);
-        console.log("searchthrudepths - otherOptions blah - " + otherOptions);
         switchTurnInPossibilities();
         gameClone[i][j] = "";
         blankCells += 1;
-        if (choice === -1000) {
-          choice = otherOptions;
+        if (score === -100) {
+          score = otherOptions;
         } else if (currentTurnInPossibilities === "O") {
-            if (otherOptions > choice) {
-              choice = otherOptions;
+            if (otherOptions > score) {
+              score = otherOptions;
             }
         } else if (currentTurnInPossibilities === "X") {
-            if (otherOptions < choice) {
-              choice = otherOptions;
+            if (otherOptions < score) {
+              score = otherOptions;
             }
         }
       }
     }
   }
-  console.log("searchthrudepths - choice blah being returned - " + choice);
-  return choice;
+  return score;
 }
 
 function createGameClone() {

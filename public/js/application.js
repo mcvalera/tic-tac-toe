@@ -103,11 +103,12 @@ function aiMove() {
         possibleResult = searchThroughDepths(1);
         gameClone[i][j] = "";
         blankCells +=1;
-        if (score === -100) {
-          score = possibleResult;
-          row = i;
-          col = j;
-        } else if (possibleResult > score) {
+        // if (score === -100) {
+        //   score = possibleResult;
+        //   row = i;
+        //   col = j;
+        // } else
+        if (possibleResult > score) {
           score = possibleResult;
           row = i;
           col = j;

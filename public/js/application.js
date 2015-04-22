@@ -1,5 +1,4 @@
 $(document).ready(function() {
-  // console.log("document ready");
 
   createGame();
   loadEventListener(); // for button to reload the game
@@ -51,7 +50,6 @@ function switchTurn() {
 
 // accessed from onclick attribute in view.html
 function humansMove(id,row,column) {
-  // debugger;
   if (blankCells === 9) {
     $(".start_text").fadeOut("slow");
   }

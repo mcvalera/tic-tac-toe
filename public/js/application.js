@@ -59,7 +59,7 @@ function humansMove(id,row,column) {
     $(".dynamic_text").html("<h4>Invalid move</h4>");
     return;
   }
-  $("#"+id).addClass("x").html("X");
+  $("#"+id).addClass("xo").html("X");
 
   // populate 2d game array with corresponding tile
   game[row][column] = "X";
@@ -125,7 +125,7 @@ function aiMove() {
 
 function populateTable(row, col) {
   var elemId = row*3 + col + 1;
-  $("#"+elemId).addClass("o").html("O");
+  $("#"+elemId).addClass("xo").html("O");
 }
 
 function searchThroughDepths(level) {

@@ -41,7 +41,6 @@ function loadEventListener() {
 }
 
 function nextTurn() {
-  console.log("next turn");
   if (currentTurn === human) {
     currentTurn = ai;
   } else {
@@ -68,17 +67,29 @@ function humansMove(id,row,column) {
 
   // decrement number of blank cells
   blankCells -= 1;
-  console.log(blankCells); //check if blank cell decrementing
+  console.log("blank cells left - " + blankCells); //check if blank cell decrementing
 
   var result = checkForWinner(game);
   if (result !== "continue") {
     endTheGame(result);
   }
   nextTurn();
+  console.log("the current turn - " + currentTurn);
   aiMove(); //undefined still
   result = checkForWinner(game);
   if (result !== "continue") {
     endTheGame(result);
+  }
+}
+
+function aiMove() {
+  // return if it's not the ai's turn -- maybe get rid of this later
+  if (currentTurn !== ai) {
+    return;
+  }
+  // return if there are no turns left / no blank cells available
+  if (blankCells === 0) {
+    return;
   }
 }
 

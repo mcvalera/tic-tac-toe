@@ -5,11 +5,19 @@ $(document).ready(function() {
   loadEventListener(); // for button to reload the game
 });
 
-var human = "X";
-var ai = "O";
-var currentTurn = human;
+var currentTurn = "X"; // where X is always human player, and O is always AI
 var blankCells = 9;
 var game; // 3x3 array
+var gameClone; //for AI to explore possibilities on
+var currentTurnInPossibilities; //declare AI as default later?
+
+function reloadGame() {
+  currentTurn = "X";
+  blankCells = 9;
+  console.log("blank cells - " + blankCells);
+  clearTable();
+  createGame();
+}
 
 // initialize game with empty 3x3 board
 function createGame() {
@@ -20,14 +28,6 @@ function createGame() {
       game[i][j] = ""
     }
   }
-}
-
-function reloadGame() {
-  currentTurn = human;
-  blankCells = 9;
-  console.log("blank cells - " + blankCells);
-  clearTable();
-  createGame();
 }
 
 function clearTable() {
@@ -42,11 +42,11 @@ function loadEventListener() {
   });
 }
 
-function nextTurn() {
-  if (currentTurn === human) {
-    currentTurn = ai;
+function switchTurn() {
+  if (currentTurn === "X") {
+    currentTurn = "O";
   } else {
-    currentTurn = human;
+    currentTurn = "X";
   }
 }
 
@@ -77,7 +77,7 @@ function humansMove(id,row,column) {
   if (result !== "continue") {
     endTheGame(result);
   }
-  nextTurn();
+  switchTurn();
   console.log("the current turn - " + currentTurn);
   aiMove(); //undefined still
   result = checkForWinner(game);
@@ -87,14 +87,30 @@ function humansMove(id,row,column) {
 }
 
 function aiMove() {
+  console.log("ai move");
   // return if it's not the ai's turn -- maybe get rid of this later
-  if (currentTurn !== ai) {
+  console.log("current turn - " + currentTurn)
+  if (currentTurn !== "O") {
     return;
   }
   // return if there are no turns left / no blank cells available
   if (blankCells === 0) {
     return;
   }
+  createGameClone();
+  currentTurnInPossibilities = "O";
+  // var decl?
+  for (var i = 0; i < gameClone.length; i++) {
+    for (var j = 0; j <gameClone[i].length; j++) {
+      if (gameClone[i][j] === "") {
+
+      }
+    }
+  }
+}
+
+function createGameClone() {
+  gameClone = game.slice()
 }
 
 // when a draw happens or a winner has been found
@@ -139,6 +155,7 @@ function checkForWinner(game) {
     return "draw";
  }
  // resume playing until game ends in a draw or a winner is found
+ console.log("continue");
  return "continue";
 }
 

@@ -1,6 +1,16 @@
 $(document).ready(function() {
   createGame();
   loadEventListener(); // for button to reload the game
+  
+  $(window).on("resize", function() {
+    var width = $(window).width();
+    if (width < 550) {
+      var w = ($(".grid td").width()) + "px";
+      $(".grid td").height(w);
+    }
+  });
+
+  $(window).trigger("resize");
 });
 
 var currentTurn = "X"; // where X is always human player, and O is always AI

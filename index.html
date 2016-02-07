@@ -2,10 +2,10 @@
   <head>
     <title>Unbeatable Tic-Tac-Toe</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- stylesheet for skeleton grid -->
-    <link rel="stylesheet" href="public/stylesheets/skeleton.css">
     <!-- stylesheet to make browsers render elements more consistently -->
     <link rel="stylesheet" href="public/stylesheets/normalize.css">
+    <!-- stylesheet for skeleton grid -->
+    <link rel="stylesheet" href="public/stylesheets/skeleton.css">
     <!-- working stylesheet, compiled from sass -->
     <link rel="stylesheet" href="public/stylesheets/application.css">
     <!-- fonts -->
@@ -19,12 +19,15 @@
     <div class="container">
       <h1>Tic Tac Toe</h1>
       <hr>
-      <h3>You can try to win, but you probably won't</h3>
-      <div class="dynamic_text">
+      <div id="header">
+        <h3>You can try to win, but you probably won't</h3>
+        <div class="dynamic_text">
         <div class="start">
           <h4 class="start_text">Start whenever you're ready</h4>
         </div>
       </div>
+      </div>
+      
 
       <div class="grid">
         <table>

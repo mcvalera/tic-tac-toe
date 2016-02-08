@@ -30,6 +30,11 @@
     height: 110px;
     font-size: 5rem;
   }
+  button#reload:hover {
+    background-color: #e95581; 
+    border: 1px solid #e95581;
+    color: #ffffff;
+  }
 }
 
 @media (min-width: 794px) {
@@ -76,10 +81,6 @@ td {
 .xo {
   color: #e95581; }
 
-button#reload:hover {
-  background-color: #e95581; 
-  border: 1px solid #e95581;
-  color: #ffffff;
-}
+
 
 /*# sourceMappingURL=application.css.map */
